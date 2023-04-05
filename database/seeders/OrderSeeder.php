@@ -22,21 +22,21 @@ class OrderSeeder extends Seeder
             'type' => 1,
             'products' => [
                 ['id' => 1, 'selected_advantages' => [1, 3, 5]],
-                ['id' => 2, 'selected_advantages' => [2, 4, 6]],
+                ['id' => 2, 'selected_advantages' => [2, 4, 6]]
             ],
         ];
         $order = Order::create([
             'name' => $orderData['name'],
-            'type' => $orderData['type']
+            'type' => $orderData['type'],
         ]);
         foreach ($orderData['products'] as $product) {
-            $orderProduct_id = OrderProduct::create([
+            $orderProduct = OrderProduct::create([
                 'order_id' => $order->id,
                 'product_id' => $product['id'],
             ]);
             foreach ($product['selected_advantages'] as $advantage) {
                 OrderProductAdvantage::create([
-                    'order_product_id' => $orderProduct_id,
+                    'order_product_id' => $orderProduct->id,
                     'advantage_id' => $advantage,
                 ]);
             }
