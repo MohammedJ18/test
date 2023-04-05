@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Advantage;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\OrderProductAdvantage;
+use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,14 +20,26 @@ class OrderSeeder extends Seeder
         $orderData = [
             'name' => 'hussam',
             'type' => 1,
-            'products' => [1, 2],
+            'products' => [
+                ['id' => 1, 'selected_advantages' => [1, 3, 5]],
+                ['id' => 2, 'selected_advantages' => [2, 4, 6]],
+            ],
         ];
-        
         $order = Order::create([
             'name' => $orderData['name'],
-            'type' => $orderData['type'],
+            'type' => $orderData['type']
         ]);
-        
-        $order->products()->attach($orderData['products']);        
+        foreach ($orderData['products'] as $product) {
+            $orderProduct_id = OrderProduct::create([
+                'order_id' => $order->id,
+                'product_id' => $product['id'],
+            ]);
+            foreach ($product['selected_advantages'] as $advantage) {
+                OrderProductAdvantage::create([
+                    'order_product_id' => $orderProduct_id,
+                    'advantage_id' => $advantage,
+                ]);
+            }
+        }
     }
 }
